@@ -22,6 +22,8 @@
   (string-intersperse
     (map (lambda (el)
            (cond
+             ((string? el)
+              (string-append "\"" el "\""))
              ((symbol? el)
               (symbol->string el))
              ((list? el)
