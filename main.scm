@@ -15,8 +15,9 @@
                            (set-response-body (render-template "index.html")
                                               response))
                           ((equal? request-path "/quotes")
-                           (set-response-body "Quotes page!"
-                                              response))
+                           (let ((q "this is a quote"))
+                             (set-response-body (render-template "quote.html" '((q . )))
+                                              response)))
                           (else
                            (set-response-status 404
                            (set-response-body "Page not found"

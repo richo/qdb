@@ -9,7 +9,7 @@
 (define render-template/locals/environment
   (lambda (template locals environment)
     (let ((tpl (load-template template)))
-      (template-eval tpl environment))))
+      (template-eval tpl locals environment))))
 
 (define load-template
   (lambda (template-file)
@@ -18,14 +18,16 @@
 
 ;; TODO Load these at boot time and check for validity
 
-(define (template-eval exp env)
+(define (template-eval exp locals env)
   (string-intersperse
     (map (lambda (el)
            (cond
              ((symbol? el)
               (symbol->string el))
              ((list? el)
-              (eval el env))
+              (if (equal? (car el) (quote ->))
+                (cdr (assoc (cadr el) locals))
+                (eval el env)))
              (else
                (error "Uncaught element"))))
        exp)

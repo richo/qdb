@@ -24,4 +24,14 @@
       "<html><head><title>butts</title></head><body>lols</body></html>"
       (render-template "test/inline_html.html"))
 
+(test "Should render templates with local variables"
+      "rawr test butts"
+      (render-template "test/local_variables.html" '((var . "butts"))))
+
+(test "Should include variables from local scope"
+      "rawr test butts"
+      (let ((somevar "butts"))
+        (render-template "test/local_variables.html" `((var . ,somevar)))))
+
+
 (test-end)
