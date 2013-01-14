@@ -20,7 +20,7 @@
     (map (lambda (el)
            (if (list? el)
               (if (equal? (car el) (quote ->))
-                (cdr (assoc (cadr el) locals))
+                (list 'quote (cdr (assoc (cadr el) locals)))
                 (template-inline-subst el locals))
              el))
          exp)))
