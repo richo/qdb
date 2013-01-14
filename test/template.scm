@@ -20,4 +20,8 @@
       "Rawr Test (hello world)"
       (render-template "test/escaped_forms.html"))
 
+(test "Should render templates with inline html"
+      "<html><head><title>butts</title></head><body>lols</body></html>"
+      (render-template "test/inline_html.html"))
+
 (test-end)
