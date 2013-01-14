@@ -26,12 +26,12 @@
 
 (test "Should render templates with local variables"
       "rawr test butts"
-      (render-template "test/local_variables.html" '((var . "butts"))))
+      (render-template "test/local_variables.html" '((key . "butts"))))
 
 (test "Should include variables from local scope"
       "rawr test butts"
       (let ((somevar "butts"))
-        (render-template "test/local_variables.html" `((var . ,somevar)))))
+        (render-template "test/local_variables.html" `((key . ,somevar)))))
 
 
 (test-end)

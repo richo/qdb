@@ -18,19 +18,24 @@
 
 ;; TODO Load these at boot time and check for validity
 
+(define template-inline-eval
+  (lambda (exp locals env)
+     (cond
+       ((string? exp)
+        (string-append "\"" exp "\""))
+       ((symbol? exp)
+        (symbol->string exp))
+       ((list? exp)
+        (if (equal? (car exp) (quote ->))
+          (cdr (assoc (cadr exp) locals))
+          (eval exp env)))
+          ; (template-inline-eval exp locals env)))
+       (else
+         (error "Uncaught element")))))
+
 (define (template-eval exp locals env)
   (string-intersperse
     (map (lambda (el)
-           (cond
-             ((string? el)
-              (string-append "\"" el "\""))
-             ((symbol? el)
-              (symbol->string el))
-             ((list? el)
-              (if (equal? (car el) (quote ->))
-                (cdr (assoc (cadr el) locals))
-                (eval el env)))
-             (else
-               (error "Uncaught element"))))
+           (template-inline-eval el locals env))
        exp)
     " "))
