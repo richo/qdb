@@ -4,11 +4,11 @@
 (require "pilgrim/pilgrim")
 
 (define qdb-port
-  (string->number (get-environment-variable "PORT")))
+  (lambda () (string->number (get-environment-variable "PORT"))))
 
 (define main
   (lambda (argv)
-    (start qdb-port (lambda (request response)
+    (start (qdb-port) (lambda (request response)
                       (let ((request-path (get-request-path request)))
                         (cond
                           ((equal? request-path "/")
