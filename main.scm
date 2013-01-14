@@ -1,5 +1,6 @@
 #!/usr/bin/env csi -ss
 
+(load-relative "template.scm")
 (require "pilgrim/pilgrim")
 
 (define qdb-port
@@ -11,7 +12,7 @@
                       (let ((request-path (get-request-path request)))
                         (cond
                           ((equal? request-path "/")
-                           (set-response-body "Index page!"
+                           (set-response-body (render-template "index.html")
                                               response))
                           ((equal? request-path "/quotes")
                            (set-response-body "Quotes page!"
