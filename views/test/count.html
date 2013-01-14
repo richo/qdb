@@ -1,0 +1,7 @@
+(letrec
+  ((count
+    (lambda (t ac)
+      (if (= t ac)
+        (number->string t)
+        (string-append (number->string ac) " " (count t (+ ac 1)))))))
+      (count (-> to) 0))

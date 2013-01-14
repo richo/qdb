@@ -37,4 +37,8 @@
       "test butts test"
       (render-template "test/inline_list_variable.html" '((key . 'butts))))
 
+(test "Should be able to do inline scheme with nested forms"
+      "0 1 2 3 4 5 6 7 8 9 10"
+      (render-template "test/count.html" '((to . 10))))
+
 (test-end)

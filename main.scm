@@ -16,7 +16,7 @@
                                               response))
                           ((equal? request-path "/quotes")
                            (let ((q "this is a quote"))
-                             (set-response-body (render-template "quote.html" '((q . )))
+                             (set-response-body (render-template "quotes.html" '((q . )))
                                               response)))
                           (else
                            (set-response-status 404
