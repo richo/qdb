@@ -1,10 +1,7 @@
 ;; Renders template in the current execution environment
-(define-syntax render-template
-  (syntax-rules ()
-                ((render-template template)
-                 (render-template/locals template '()))
-                ((render-template template locals)
-                 (render-template/locals template locals))))
+(define render-template
+  (lambda (template #!optional (locals '()))
+            (render-template/locals template locals)))
 
 (define render-template/locals
   (lambda (template locals)
