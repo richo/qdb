@@ -16,4 +16,8 @@
       "Rawr Test buttslol Foo"
       (render-template "test/interpolated_forms.html"))
 
+(test "Should render templates with escaped forms"
+      "Rawr Test (hello world)"
+      (render-template "test/escaped_forms.html"))
+
 (test-end)
