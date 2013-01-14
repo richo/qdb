@@ -1,5 +1,7 @@
 #!/usr/bin/env csi -ss
 
+(use srfi-1)
+
 (load-relative "template.scm")
 (require "pilgrim/pilgrim")
 
@@ -15,8 +17,8 @@
                            (set-response-body (render-template "index.html")
                                               response))
                           ((equal? request-path "/quotes")
-                           (let ((q "this is a quote"))
-                             (set-response-body (render-template "quotes.html" '((q . )))
+                           (let ((db-quotes (list "This is a quote" "This is also a quote")))
+                             (set-response-body (render-template "quotes.html" `((quotes . ,db-quotes)))
                                               response)))
                           (else
                            (set-response-status 404

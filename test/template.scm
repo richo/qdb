@@ -41,4 +41,10 @@
       "0 1 2 3 4 5 6 7 8 9 10"
       (render-template "test/count.html" '((to . 10))))
 
+(test "Interpolated complex data structures"
+      "This is a test"
+      (let ((st '((baz . "This is a test") (foo . bar) )))
+        (render-template "test/complex_data_structures.html" (alist-cons 'key st '()))))
+        ; (cdr (assoc 'baz st))))
+
 (test-end)
