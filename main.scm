@@ -8,6 +8,16 @@
 (define main
   (lambda (argv)
     (start qdb-port (lambda (request response)
-             (set-response-body "'(db)"
-                                response)
-             ))))
+                      (let ((request-path (get-request-path request)))
+                        (cond
+                          ((equal? request-path "/")
+                           (set-response-body "Index page!"
+                                              response))
+                          ((equal? request-path "/quotes")
+                           (set-response-body "Quotes page!"
+                                              response))
+                          (else
+                           (set-response-status 404
+                           (set-response-body "Page not found"
+                                              response))
+                        ))))))
