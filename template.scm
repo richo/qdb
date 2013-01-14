@@ -2,14 +2,14 @@
 (define-syntax render-template
   (syntax-rules ()
                 ((render-template template)
-                 (render-template/locals/environment template '() (interaction-environment)))
+                 (render-template/locals template '()))
                 ((render-template template locals)
-                 (render-template/locals/environment template locals (interaction-environment)))))
+                 (render-template/locals template locals))))
 
-(define render-template/locals/environment
-  (lambda (template locals environment)
+(define render-template/locals
+  (lambda (template locals)
     (let ((tpl (load-template template)))
-      (template-eval tpl locals environment))))
+      (template-eval tpl locals))))
 
 (define load-template
   (lambda (template-file)
@@ -19,18 +19,18 @@
 ;; TODO Load these at boot time and check for validity
 
 (define template-inline-subst
-  (lambda (exp locals env)
+  (lambda (exp locals)
     (map (lambda (el)
            (if (list? el)
               (if (equal? (car el) (quote ->))
                 (cdr (assoc (cadr el) locals))
-                (template-inline-subst el locals env))
+                (template-inline-subst el locals))
              el))
          exp)))
 
 ;; Toplevel eval deals with string emitting valid markup, etc.
 (define template-toplevel-eval
-  (lambda (exp locals env)
+  (lambda (exp locals)
      (cond
        ((string? exp)
         (string-append "\"" exp "\""))
@@ -39,13 +39,13 @@
        ((list? exp)
         (if (equal? (car exp) (quote ->))
           (cdr (assoc (cadr exp) locals))
-          (eval (template-inline-subst exp locals env))))
+          (eval (template-inline-subst exp locals))))
        (else
          (error "Uncaught toplevel element")))))
 
-(define (template-eval exp locals env)
+(define (template-eval exp locals)
   (string-intersperse
     (map (lambda (el)
-           (template-toplevel-eval el locals env))
+           (template-toplevel-eval el locals))
        exp)
     " "))
