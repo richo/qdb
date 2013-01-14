@@ -33,5 +33,8 @@
       (let ((somevar "butts"))
         (render-template "test/local_variables.html" `((key . ,somevar)))))
 
+(test "Should handle inline variables in other forms"
+      "test butts test"
+      (render-template "test/inline_list_variable.html" '((key . 'butts))))
 
 (test-end)

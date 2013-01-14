@@ -18,15 +18,15 @@
 
 ;; TODO Load these at boot time and check for validity
 
-(define template-inline-eval
+(define template-inline-subst
   (lambda (exp locals env)
-    (eval (map (lambda (el)
-                 (if (list? el)
-                    (if (equal? (car exp) (quote ->))
-                      (cdr (assoc (cadr exp) locals))
-                      (template-inline-eval exp locals env))
-                    el))
-                   exp))))
+    (map (lambda (el)
+           (if (list? el)
+              (if (equal? (car el) (quote ->))
+                (cdr (assoc (cadr el) locals))
+                (template-inline-subst el locals env))
+             el))
+         exp)))
 
 ;; Toplevel eval deals with string emitting valid markup, etc.
 (define template-toplevel-eval
@@ -39,7 +39,7 @@
        ((list? exp)
         (if (equal? (car exp) (quote ->))
           (cdr (assoc (cadr exp) locals))
-          (template-inline-eval exp locals env)))
+          (eval (template-inline-subst exp locals env))))
        (else
          (error "Uncaught toplevel element")))))
 
