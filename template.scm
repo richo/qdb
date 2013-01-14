@@ -20,6 +20,17 @@
 
 (define template-inline-eval
   (lambda (exp locals env)
+    (eval (map (lambda (el)
+                 (if (list? el)
+                    (if (equal? (car exp) (quote ->))
+                      (cdr (assoc (cadr exp) locals))
+                      (template-inline-eval exp locals env))
+                    el))
+                   exp))))
+
+;; Toplevel eval deals with string emitting valid markup, etc.
+(define template-toplevel-eval
+  (lambda (exp locals env)
      (cond
        ((string? exp)
         (string-append "\"" exp "\""))
@@ -28,14 +39,13 @@
        ((list? exp)
         (if (equal? (car exp) (quote ->))
           (cdr (assoc (cadr exp) locals))
-          (eval exp env)))
-          ; (template-inline-eval exp locals env)))
+          (template-inline-eval exp locals env)))
        (else
-         (error "Uncaught element")))))
+         (error "Uncaught toplevel element")))))
 
 (define (template-eval exp locals env)
   (string-intersperse
     (map (lambda (el)
-           (template-inline-eval el locals env))
+           (template-toplevel-eval el locals env))
        exp)
     " "))
