@@ -42,7 +42,7 @@
       (render-template "test/count.html" '((to . 10))))
 
 (test "Interpolated complex data structures"
-      "This is a test"
+      "beep This is a test boop"
       (let ((st '((baz . "This is a test") (foo . bar) )))
         (render-template "test/complex_data_structures.html" (alist-cons 'key st '()))))
         ; (cdr (assoc 'baz st))))
