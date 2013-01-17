@@ -25,20 +25,30 @@
              el))
          exp)))
 
+(define template-expand
+  (lambda (el)
+   (cond
+     ((string? el)
+      el)
+     ((symbol? el)
+      (symbol->string el))
+     (else
+       (display el)
+       (error "Uncaught toplevel element")))))
+
 ;; Toplevel eval deals with string emitting valid markup, etc.
 (define template-toplevel-eval
   (lambda (exp locals)
-     (cond
-       ((string? exp)
-        (string-append "\"" exp "\""))
-       ((symbol? exp)
-        (symbol->string exp))
-       ((list? exp)
-        (if (equal? (car exp) (quote ->))
-          (cdr (assoc (cadr exp) locals))
-          (eval (template-inline-subst exp locals))))
-       (else
-         (error "Uncaught toplevel element")))))
+    (template-expand
+      (cond
+         ((string? exp)
+          (string-append "\"" exp "\""))
+         ((list? exp)
+          (if (equal? (car exp) (quote ->))
+            (cdr (assoc (cadr exp) locals))
+            (eval (template-inline-subst exp locals))))
+         (else
+           exp)))))
 
 (define (template-eval exp locals)
   (string-intersperse

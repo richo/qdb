@@ -34,8 +34,8 @@
         (render-template "test/local_variables.html" `((key . ,somevar)))))
 
 (test "Should handle inline variables in other forms"
-      "test butts test"
-      (render-template "test/inline_list_variable.html" '((key . 'butts))))
+      "test trololol test"
+      (render-template "test/inline_list_variable.html" '((key . "trololol"))))
 
 (test "Should be able to do inline scheme with nested forms"
       "0 1 2 3 4 5 6 7 8 9 10"
