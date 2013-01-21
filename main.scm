@@ -2,11 +2,14 @@
 
 (use srfi-1)
 
-(load-relative "template.scm")
 (require "pilgrim/pilgrim")
+(require "templort/templort")
 
 (define qdb-port
   (lambda () (string->number (get-environment-variable "PORT"))))
+
+(define render-template
+  (make-renderer "views"))
 
 (define main
   (lambda (argv)

@@ -1,3 +1,6 @@
 [submodule "pilgrim"]
 	path = pilgrim
 	url = git@github.com:richo/pilgrim.git
+[submodule "templort"]
+	path = templort
+	url = git@github.com:richo/templort.git
