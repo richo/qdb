@@ -14,7 +14,8 @@
 (define main
   (lambda (argv)
     (start (qdb-port) (lambda (request response)
-                      (let ((request-path (get-request-path request)))
+                      (let ((request-path (get-request-path request))
+                            (request-method (get-request-method request)))
                         (cond
                           ((equal? request-path "/")
                            (set-response-body (render-template "index.html")
@@ -23,6 +24,11 @@
                            (let ((db-quotes (list "This is a quote" "This is also a quote")))
                              (set-response-body (render-template "quotes.html" `((quotes . ,db-quotes)))
                                               response)))
+                          ((equal? request-path "/submit")
+                           (cond ((equal? request-method "GET")
+                             (set-response-body (render-template "submit.html")
+                                                response))))
+
                           (else
                            (set-response-status 404
                            (set-response-body "Page not found"
