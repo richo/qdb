@@ -6,7 +6,8 @@
     <table>
       <tr><th>ID</th><th>Quote</th></tr>
       (string-intersperse (map (lambda (el)
-      (string-append "<tr><td>0</td><td>" el "</td></tr>"))
+      (string-append "<tr><td><a href=\"/quotes/" (number->string (car el)) "\">" (number->string (car el)) "</a></td><td>" (cdr el) "</td></tr>"))
         (-> quotes)) "\n")
-
-
+      </table>
+    </body>
+  </html>

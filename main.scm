@@ -23,6 +23,15 @@
   (lambda (q)
     (substring q (+ 1 (string-index q #\=)))))
 
+(define all-quotes
+  (lambda ()
+    (letrec ((main (lambda (prg id)
+                     (let ((next (quote-reader id)))
+                       (if next
+                         (main (alist-update id next prg) (+ id 1))
+                         prg)))))
+      (main '() 1))))
+
 (define main
   (lambda (argv)
     (start (qdb-port) (lambda (request response)
@@ -33,9 +42,8 @@
                            (set-response-body (render-template "index.html")
                                               response))
                           ((equal? request-path "/quotes")
-                           (let ((db-quotes (list "This is a quote" "This is also a quote")))
-                             (set-response-body (render-template "quotes.html" `((quotes . ,db-quotes)))
-                                              response)))
+                             (set-response-body (render-template "quotes.html" `((quotes . ,(all-quotes))))
+                                              response))
                           ((string-prefix? "/quotes/" request-path)
                            (let* ((quote-id (string->number
                                             (substring request-path
