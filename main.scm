@@ -5,11 +5,19 @@
 (require "pilgrim/pilgrim")
 (require "templort/templort")
 
+(require "database")
+
 (define qdb-port
   (lambda () (string->number (get-environment-variable "PORT"))))
 
 (define render-template
   (make-renderer "views"))
+
+(define quote-writer
+  (make-writer "db"))
+
+(define quote-reader
+  (make-reader "db"))
 
 (define main
   (lambda (argv)
@@ -24,6 +32,16 @@
                            (let ((db-quotes (list "This is a quote" "This is also a quote")))
                              (set-response-body (render-template "quotes.html" `((quotes . ,db-quotes)))
                                               response)))
+                          ((string-prefix? "/quotes/" request-path)
+                           (let* ((quote-id (string->number
+                                            (substring request-path
+                                                       (+ 1 (string-index-right request-path #\/)))))
+                                  (quote-content (quote-reader quote-id))
+                                  )
+                             (set-response-body (render-template "quote.html"
+                                                               `((quote-id . ,quote-id)
+                                                                 (quote-content . ,quote-content)))
+                                                response)))
                           ((equal? request-path "/submit")
                            (cond ((equal? request-method "GET")
                              (set-response-body (render-template "submit.html")
