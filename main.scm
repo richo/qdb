@@ -19,6 +19,10 @@
 (define quote-reader
   (make-reader "db"))
 
+(define parse-quote
+  (lambda (q)
+    (substring q (+ 1 (string-index q #\=)))))
+
 (define main
   (lambda (argv)
     (start (qdb-port) (lambda (request response)
@@ -45,8 +49,15 @@
                           ((equal? request-path "/submit")
                            (cond ((equal? request-method "GET")
                              (set-response-body (render-template "submit.html")
-                                                response))))
-
+                                                response))
+                                 ((equal? request-method "POST")
+                             (let* ((new-quote (parse-quote (get-request-body request)))
+                                    (new-id (quote-writer new-quote)))
+                               (set-response-body (render-template "submitted.html"
+                                                                   `((new-id . ,(number->string new-id))
+                                                                     (new-quote . ,new-quote)
+                                                                     (quote-link . ,(string-append "\"" "/quotes/" (number->string new-id) "\""))))
+                                                response)))))
                           (else
                            (set-response-status 404
                            (set-response-body "Page not found"
