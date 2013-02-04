@@ -44,4 +44,7 @@
 (define make-reader
   (lambda (db-path)
     (lambda (id)
-      (read-all (string-append db-path "/" (number->string id) "/content")))))
+      (let ((path (string-append db-path "/" (number->string id) "/content")))
+        (if (file-exists? path)
+          (read-all path)
+          #f)))))
