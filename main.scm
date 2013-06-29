@@ -10,6 +10,9 @@
 (define qdb-port
   (lambda () (string->number (get-environment-variable "PORT"))))
 
+(define threaded?
+  #f)
+
 (define render-template
   (make-renderer "views"))
 
@@ -34,7 +37,7 @@
 
 (define main
   (lambda (argv)
-    (start (qdb-port) (lambda (request response)
+    (start (qdb-port) threaded? (lambda (request response)
                       (let ((request-path (get-request-path request))
                             (request-method (get-request-method request)))
                         (cond
